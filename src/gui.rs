@@ -3,7 +3,7 @@ use std::rc::Rc;
 
 use gdk;
 use gtk::prelude::*;
-use gtk::{self, Button, DrawingArea, Window, WindowType, Orientation, Inhibit};
+use gtk::{self, Button, DrawingArea, Inhibit, Orientation, Window, WindowType};
 
 use grid::Grid;
 
@@ -102,6 +102,17 @@ pub fn create() {
     button_container.pack_start(&stop_simulation_button, false, false, 0);
     stop_simulation_button.connect_clicked(clone!(model => move |_| {
         model.borrow_mut().run_simulation = false;
+    }));
+
+    let clear_button = Button::new_with_label("Clear");
+    button_container.pack_start(&clear_button, false, false, 0);
+    clear_button.connect_clicked(clone!(drawing_area, model => move |_| {
+        let mut model = model.borrow_mut();
+        for cell in &mut model.grid.cells {
+            cell.alive = false;
+        }
+
+        drawing_area.queue_draw();
     }));
 
     window.show_all();
