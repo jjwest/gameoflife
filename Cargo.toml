@@ -3,11 +3,7 @@ authors = ["Jonas Westlund <jonaswestlund101@gmail.com>"]
 name = "gameoflife"
 version = "0.1.0"
 [dependencies]
-cairo-rs = "0.2.0"
 gdk = "0.6.0"
-relm = "0.10.1"
-relm-attributes = "0.10.0"
-relm-derive = "0.10.0"
 
 [dependencies.clippy]
 optional = true

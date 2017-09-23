@@ -15,13 +15,7 @@ impl Grid {
         Grid {
             width,
             height,
-            cells: {
-                let mut cells = vec![Cell { alive: false }; width * height];
-                cells[width / 2].alive = true;
-                cells[width / 2 - 1].alive = true;
-                cells[width / 2 - 2].alive = true;
-                cells
-            },
+            cells: vec![Cell { alive: false }; width * height],
         }
     }
 
@@ -48,6 +42,7 @@ impl Grid {
     fn count_alive_neighbours(&self, cell: usize) -> usize {
         let mut neighbours = [None; 8];
 
+        // Check left side neighbours if we are not in the first column
         if cell % self.width != 0 {
             neighbours[0] = self.cells.get(cell.wrapping_sub(self.width - 1));
             neighbours[1] = self.cells.get(cell.wrapping_sub(1));
@@ -57,6 +52,7 @@ impl Grid {
         neighbours[3] = self.cells.get(cell.wrapping_sub(self.width));
         neighbours[4] = self.cells.get(cell + self.width);
 
+        // Check right side neighbours if we are not in the last column
         if cell % self.width != self.width - 1 {
             neighbours[5] = self.cells.get(cell.wrapping_sub(self.width + 1));
             neighbours[6] = self.cells.get(cell + self.width + 1);
@@ -68,6 +64,10 @@ impl Grid {
             .filter_map(|&n| n)
             .filter(|&n| n.alive)
             .count()
+    }
+
+    pub fn toggle_cell_alive(&mut self, x: usize, y: usize) {
+        self.cells[y * self.width + x].alive = !self.cells[y * self.width + x].alive;
     }
 }
 
