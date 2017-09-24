@@ -39,24 +39,25 @@ impl Grid {
         self.cells = next_gen;
     }
 
-    fn count_alive_neighbours(&self, cell: usize) -> usize {
+    fn count_alive_neighbours(&self, origin: usize) -> usize {
         let mut neighbours = [None; 8];
 
         // Check left side neighbours if we are not in the first column
-        if cell % self.width != 0 {
-            neighbours[0] = self.cells.get(cell.wrapping_sub(self.width - 1));
-            neighbours[1] = self.cells.get(cell.wrapping_sub(1));
-            neighbours[2] = self.cells.get(cell + self.width - 1);
+        if origin % self.width != 0 {
+            neighbours[0] = self.cells.get(origin.wrapping_sub(self.width - 1));
+            neighbours[1] = self.cells.get(origin.wrapping_sub(1));
+            neighbours[2] = self.cells.get(origin + self.width - 1);
         }
 
-        neighbours[3] = self.cells.get(cell.wrapping_sub(self.width));
-        neighbours[4] = self.cells.get(cell + self.width);
+        // Check top and bottom neighbours
+        neighbours[3] = self.cells.get(origin.wrapping_sub(self.width));
+        neighbours[4] = self.cells.get(origin + self.width);
 
         // Check right side neighbours if we are not in the last column
-        if cell % self.width != self.width - 1 {
-            neighbours[5] = self.cells.get(cell.wrapping_sub(self.width + 1));
-            neighbours[6] = self.cells.get(cell + self.width + 1);
-            neighbours[7] = self.cells.get(cell + 1);
+        if origin % self.width != self.width - 1 {
+            neighbours[5] = self.cells.get(origin.wrapping_sub(self.width + 1));
+            neighbours[6] = self.cells.get(origin + self.width + 1);
+            neighbours[7] = self.cells.get(origin + 1);
         }
 
         neighbours
@@ -64,6 +65,10 @@ impl Grid {
             .filter_map(|&n| n)
             .filter(|&n| n.alive)
             .count()
+    }
+
+    pub fn get(&self, x: usize, y: usize) -> Cell {
+        self.cells[y * self.width + x]
     }
 
     pub fn toggle_cell_alive(&mut self, x: usize, y: usize) {
@@ -89,25 +94,21 @@ mod tests {
                 dead,
                 alive,
                 alive,
-
                 alive,
                 alive,
                 dead,
                 dead,
                 dead,
-
                 dead,
                 alive,
                 dead,
                 dead,
                 dead,
-
                 dead,
                 dead,
                 dead,
                 dead,
                 dead,
-
                 dead,
                 dead,
                 dead,

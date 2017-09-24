@@ -35,6 +35,7 @@ pub fn create() {
     container.add(&drawing_area);
     drawing_area.set_hexpand(true);
     drawing_area.set_vexpand(true);
+
     drawing_area.connect_draw(clone!(model, drawing_area => move |_, cr| {
         let mut model = model.borrow_mut();
         let (width, height) = (model.grid.width, model.grid.height);
@@ -47,9 +48,12 @@ pub fn create() {
             for x in 1..width {
                 cr.rectangle(x as f64 * model.scale, y as f64 * model.scale, model.scale, model.scale);
                 cr.set_line_width(0.8);
-                if model.grid.cells[(y * width) + x].alive {
+
+                let cell = model.grid.get(x, y);
+                if cell.alive {
                     cr.fill_preserve();
                 }
+
                 cr.stroke();
             }
         }
