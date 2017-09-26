@@ -38,15 +38,20 @@ pub fn create() {
 
     drawing_area.connect_draw(clone!(model, drawing_area => move |_, cr| {
         let mut model = model.borrow_mut();
-        let (width, height) = (model.grid.width, model.grid.height);
+        let (grid_width, grid_height) = (model.grid.width, model.grid.height);
         let widget_height = drawing_area.get_allocated_height();
-        model.scale = (widget_height as usize / height) as f64;
+        model.scale = (widget_height as usize / grid_height) as f64;
 
         cr.set_source_rgb(0., 0., 0.);
 
         for y in 1..height {
             for x in 1..width {
-                cr.rectangle(x as f64 * model.scale, y as f64 * model.scale, model.scale, model.scale);
+                cr.rectangle(
+                    x as f64 * model.scale,
+                    y as f64 * model.scale,
+                    model.scale,
+                    model.scale
+                );
                 cr.set_line_width(0.8);
 
                 let cell = model.grid.get(x, y);
@@ -69,7 +74,7 @@ pub fn create() {
         let cell_x = (clicked_x / model.scale) as usize;
         let cell_y = (clicked_y / model.scale) as usize;
         model.grid.toggle_cell_alive(cell_x, cell_y);
-        
+       
         drawing_area.queue_draw();
         Inhibit(false)
     }));

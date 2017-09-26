@@ -15,3 +15,6 @@ version = "0.2.0"
 
 [features]
 default = []
+
+[profile.dev]
+codegen-units=32

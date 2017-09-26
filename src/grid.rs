@@ -72,7 +72,8 @@ impl Grid {
     }
 
     pub fn toggle_cell_alive(&mut self, x: usize, y: usize) {
-        self.cells[y * self.width + x].alive = !self.cells[y * self.width + x].alive;
+        let cell = &mut self.cells[y * self.width + x];
+        cell.alive = !cell.alive;
     }
 }
 
