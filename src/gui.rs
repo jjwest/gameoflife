@@ -44,8 +44,8 @@ pub fn create() {
 
         cr.set_source_rgb(0., 0., 0.);
 
-        for y in 1..height {
-            for x in 1..width {
+        for y in 1..grid_height {
+            for x in 1..grid_width {
                 cr.rectangle(
                     x as f64 * model.scale,
                     y as f64 * model.scale,
