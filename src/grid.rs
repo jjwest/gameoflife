@@ -1,9 +1,8 @@
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone)]
 pub struct Cell {
     pub alive: bool,
 }
 
-#[derive(Clone, Debug)]
 pub struct Grid {
     pub width: usize,
     pub height: usize,
