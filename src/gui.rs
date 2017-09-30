@@ -38,14 +38,13 @@ pub fn create() {
 
     drawing_area.connect_draw(clone!(model, drawing_area => move |_, cr| {
         let mut model = model.borrow_mut();
-        let (grid_width, grid_height) = (model.grid.width, model.grid.height);
         let widget_height = drawing_area.get_allocated_height();
-        model.scale = (widget_height as usize / grid_height) as f64;
+        model.scale = (widget_height as usize / model.grid.height) as f64;
 
         cr.set_source_rgb(0., 0., 0.);
 
-        for y in 1..grid_height {
-            for x in 1..grid_width {
+        for y in 1..model.grid.height {
+            for x in 1..model.grid.width {
                 cr.rectangle(
                     x as f64 * model.scale,
                     y as f64 * model.scale,

@@ -21,17 +21,15 @@ impl Grid {
     pub fn next_generation(&mut self) {
         let mut next_gen = self.cells.clone();
 
-        for i in 0..self.cells.len() {
+        for (i, cell) in self.cells.iter().enumerate() {
             let neighbours = self.count_alive_neighbours(i);
 
-            if self.cells[i].alive {
+            if cell.alive {
                 if neighbours < 2 || neighbours > 3 {
                     next_gen[i].alive = false;
                 }
-            } else {
-                if neighbours == 3 {
-                    next_gen[i].alive = true;
-                }
+            } else if neighbours == 3 {
+                next_gen[i].alive = true;
             }
         }
 
