@@ -1,12 +1,14 @@
+use std::ops::{Index, IndexMut};
+
 #[derive(Copy, Clone)]
 pub struct Cell {
     pub alive: bool,
 }
 
 pub struct Grid {
-    pub width: usize,
-    pub height: usize,
-    pub cells: Vec<Cell>,
+    width: usize,
+    height: usize,
+    cells: Vec<Cell>,
 }
 
 impl Grid {
@@ -64,13 +66,47 @@ impl Grid {
             .count()
     }
 
-    pub fn get(&self, x: usize, y: usize) -> Cell {
-        self.cells[y * self.width + x]
+    pub fn get_width(&self) -> usize {
+        self.width
     }
 
-    pub fn toggle_cell_alive(&mut self, x: usize, y: usize) {
-        let cell = &mut self.cells[y * self.width + x];
-        cell.alive = !cell.alive;
+    pub fn get_height(&self) -> usize {
+        self.height
+    }
+
+    pub fn resize(&mut self, width: usize, height: usize) {
+        self.cells.resize(width * height, Cell { alive: false });
+        self.width = width;
+        self.height = height;
+    }
+}
+
+impl Index<(usize, usize)> for Grid {
+    type Output = Cell;
+    fn index(&self, (x, y): (usize, usize)) -> &Cell {
+        &self.cells[y * self.width + x]
+    }
+}
+
+impl IndexMut<(usize, usize)> for Grid {
+    fn index_mut(&mut self, (x, y): (usize, usize)) -> &mut Cell {
+        &mut self.cells[y * self.width + x]
+    }
+}
+
+impl<'a> IntoIterator for &'a Grid {
+    type Item = &'a Cell;
+    type IntoIter = ::std::slice::Iter<'a, Cell>;
+    fn into_iter(self) -> Self::IntoIter {
+        self.cells.iter()
+    }
+}
+
+impl<'a> IntoIterator for &'a mut Grid {
+    type Item = &'a mut Cell;
+    type IntoIter = ::std::slice::IterMut<'a, Cell>;
+    fn into_iter(self) -> Self::IntoIter {
+        self.cells.iter_mut()
     }
 }
 
